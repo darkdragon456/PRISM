@@ -15,6 +15,15 @@ export default function QRModal({ open, onClose, value, label }) {
 
   if (!open) return null
 
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(value)
+      alert('Link copied to clipboard!')
+    } catch (err) {
+      console.error('Failed to copy:', err)
+    }
+  }
+
   return (
     <div className="qr-backdrop" role="dialog" aria-modal="true">
       <div className="qr-modal">
@@ -27,7 +36,7 @@ export default function QRModal({ open, onClose, value, label }) {
         )}
         <div className="qr-actions">
           <a className="btn" href={value} target="_blank" rel="noopener noreferrer">Open</a>
-          <button className="btn" onClick={() => navigator.clipboard && navigator.clipboard.writeText(value)}>Copy Link</button>
+          <button className="btn" onClick={handleCopy}>Copy Link</button>
         </div>
       </div>
     </div>

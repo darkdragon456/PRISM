@@ -1,5 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import QRModal from './components/QRModal'
+
+const WHATSAPP_NUMBER = '919021436667'
+
+const BOOKING_MESSAGES = {
+  small: 'Hello, I want to book the Small Screen package (6x4) for ₹1,200. Please share availability.',
+  big: 'Hello, I want to book the Big Screen package (8x6) for ₹1,500. Please share availability.',
+  paOnly: 'Hello, I want to book the PA System (2 speakers) for ₹3,000. Please share availability.',
+  paPackage: 'Hello, I want to book the PA + Big Screen package (PA with 2 speakers + 8x6 projector) for ₹4,500. Please share availability.'
+}
 
 export default function App() {
   const [theme, setTheme] = useState('dark')
@@ -13,11 +22,12 @@ export default function App() {
     document.documentElement.setAttribute('data-theme', saved)
   }, [])
   
-  const whatsappNumber = '919021436667'
-  const bookSmallMsg = encodeURIComponent('Hello, I want to book the Small Screen package (6x4) for ₹1,200. Please share availability.')
-  const bookBigMsg = encodeURIComponent('Hello, I want to book the Big Screen package (8x6) for ₹1,500. Please share availability.')
-  const bookPAonlyMsg = encodeURIComponent('Hello, I want to book the PA System (2 speakers) for ₹3,000. Please share availability.')
-  const bookPAPkgMsg = encodeURIComponent('Hello, I want to book the PA + Big Screen package (PA with 2 speakers + 8x6 projector) for ₹4,500. Please share availability.')
+  const encodedMessages = useMemo(() => ({
+    small: encodeURIComponent(BOOKING_MESSAGES.small),
+    big: encodeURIComponent(BOOKING_MESSAGES.big),
+    paOnly: encodeURIComponent(BOOKING_MESSAGES.paOnly),
+    paPackage: encodeURIComponent(BOOKING_MESSAGES.paPackage)
+  }), [])
   return (
     <div className="app">
       <header className="navbar">
@@ -48,7 +58,6 @@ export default function App() {
           <a
             className="nav-cta"
             href="tel:+919021436667"
-            onClick={() => { window.location.href = 'tel:+919021436667' }}
           >
             Call Now
           </a>
@@ -113,7 +122,7 @@ export default function App() {
               <div className="price">₹1,200<span>/day</span></div>
               <a
                 className="btn btn-primary"
-                href={`https://wa.me/${whatsappNumber}?text=${bookSmallMsg}`}
+                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessages.small}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -126,7 +135,7 @@ export default function App() {
               <div className="price">₹1,500<span>/day</span></div>
               <a
                 className="btn btn-primary"
-                href={`https://wa.me/${whatsappNumber}?text=${bookBigMsg}`}
+                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessages.big}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -139,7 +148,7 @@ export default function App() {
               <div className="price">₹3,000<span>/day</span></div>
               <a
                 className="btn btn-primary"
-                href={`https://wa.me/${whatsappNumber}?text=${bookPAonlyMsg}`}
+                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessages.paOnly}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -148,12 +157,11 @@ export default function App() {
             </div>
 
             <div className="price-card featured">
-               
               <h3>PA + Big Screen Package</h3>
               <div className="price">₹4,500<span>/day</span></div>
               <a
                 className="btn btn-primary"
-                href={`https://wa.me/${whatsappNumber}?text=${bookPAPkgMsg}`}
+                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessages.paPackage}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -171,8 +179,8 @@ export default function App() {
             <p>Bringing high-end visual projection to your doorstep.</p>
             <div className="social-links">
               <a href="https://instagram.com/Prism_events.202" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram"></i></a>
-              <a href="https://wa.me/919021436667" target="_blank" rel="noopener noreferrer"><i className="fab fa-whatsapp"></i></a>
-              <button className="qr-btn" onClick={() => { setQrValue('https://wa.me/919021436667'); setQrLabel('WhatsApp'); setQrOpen(true) }} aria-label="Show WhatsApp QR">QR</button>
+              <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer"><i className="fab fa-whatsapp"></i></a>
+              <button className="qr-btn" onClick={() => { setQrValue(`https://wa.me/${WHATSAPP_NUMBER}`); setQrLabel('WhatsApp'); setQrOpen(true) }} aria-label="Show WhatsApp QR">QR</button>
               <button className="qr-btn" onClick={() => { setQrValue('tel:+919021436667'); setQrLabel('Call PRISM'); setQrOpen(true) }} aria-label="Show Call QR">Call QR</button>
               <button className="qr-btn" onClick={() => { setQrValue(window.location.origin); setQrLabel('Website'); setQrOpen(true) }} aria-label="Show Website QR">Site QR</button>
             </div>
@@ -187,7 +195,7 @@ export default function App() {
         <div className="copyright">&copy; 2026 PRISM EVENTS. All Rights Reserved.</div>
       </footer>
       {/* Floating call button for mobile */}
-      <a className="floating-call" href="tel:+919021436667" onClick={() => { window.location.href = 'tel:+919021436667' }} aria-label="Call PRISM now">
+      <a className="floating-call" href="tel:+919021436667" aria-label="Call PRISM now">
         <i className="fas fa-phone" />
       </a>
     </div>
